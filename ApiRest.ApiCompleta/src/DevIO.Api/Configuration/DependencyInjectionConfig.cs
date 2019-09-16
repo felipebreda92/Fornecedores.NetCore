@@ -8,10 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using KissLog.Apis.v1.Listeners;
-using KissLog.AspNetCore;
-using KissLog.Listeners;
-using KissLog;
 
 namespace DevIO.Api.Configuration
 {

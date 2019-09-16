@@ -1,8 +1,9 @@
-﻿using DevIO.Api.Controllers;
+﻿using System;
+using DevIO.Api.Controllers;
 using DevIO.Business.Intefaces;
-using KissLog;
+using Elmah.Io.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Logging;
 
 namespace DevIO.Api.V2.Controllers
 {
@@ -13,7 +14,7 @@ namespace DevIO.Api.V2.Controllers
         private readonly ILogger _logger;
         public TesteController(INotificador notificador
                                , IUser appUser
-                               , ILogger logger) : base(notificador, appUser)
+                               , ILogger<TesteController> logger) : base(notificador, appUser)
         {
             _logger = logger;
         }
@@ -21,15 +22,24 @@ namespace DevIO.Api.V2.Controllers
         [HttpGet]
         public string Valor()
         {
-            try
-            {
-                int i = 0;
-                var result = 42 / i;
-            }
-            catch (DivideByZeroException e)
-            {
-                _logger.Error(e.Message);
-            }
+
+            throw new Exception("Error");
+            //try
+            //{
+            //    int i = 0;
+            //    var result = 42 / i;
+            //}
+            //catch (DivideByZeroException e)
+            //{
+            //    e.Ship(HttpContext);
+            //}
+
+            _logger.LogTrace("Log de Trace");
+            _logger.LogDebug("Log de Debug");
+            _logger.LogInformation("Log de Informação");
+            _logger.LogWarning("Log de Warning");
+            _logger.LogError("Log de Erro");
+            _logger.LogCritical("Log de Problema Crítico");
 
             return "V2";
         }

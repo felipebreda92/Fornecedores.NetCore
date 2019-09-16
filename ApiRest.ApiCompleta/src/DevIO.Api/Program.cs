@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DevIO.Api
 {
-    public class Program
+    public class Programg
     {
         public static void Main(string[] args)
         {
@@ -19,6 +19,8 @@ namespace DevIO.Api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                   .UseContentRoot(Directory.GetCurrentDirectory())
+                   .UseIISIntegration()
+                   .UseStartup<Startup>();
     }
 }

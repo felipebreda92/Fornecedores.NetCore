@@ -3,9 +3,6 @@ using DevIO.Api.Configuration;
 using DevIO.Api.Extensions;
 using DevIO.Data.Context;
 using HealthChecks.UI.Client;
-using KissLog;
-using KissLog.Apis.v1.Listeners;
-using KissLog.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -28,14 +25,14 @@ namespace DevIO.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<IISOptions>(o =>
+            {
+                o.ForwardClientCertificate = false;
+            });
+
             services.AddDbContext<MeuDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
-            services.AddSingleton<ILogger>((context) =>
-            {
-                return Logger.Factory.Get();
             });
 
             services.AddIdentityConfiguration(Configuration );
@@ -49,7 +46,6 @@ namespace DevIO.Api
             services.AddLoggingConfiguration(Configuration);
 
             services.ResolveDependencies();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,13 +62,6 @@ namespace DevIO.Api
                 app.UseHsts();
             }
 
-            app.UseKissLogMiddleware(options => {
-                options.Listeners.Add(new KissLogApiListener(new KissLog.Apis.v1.Auth.Application(
-                    Configuration["KissLog.OrganizationId"],
-                    Configuration["KissLog.ApplicationId"])
-                ));
-            });
-
             app.UseAuthentication();
 
             app.UseMiddleware<ExceptionMiddleware>();
@@ -82,6 +71,7 @@ namespace DevIO.Api
             app.UseLoggingConfiguration();
 
             app.UseSwaggerConfig(provider);
+
         }
     }
 }

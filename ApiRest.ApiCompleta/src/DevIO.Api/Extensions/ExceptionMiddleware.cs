@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using Elmah.Io.AspNetCore;
-using KissLog;
 using Microsoft.AspNetCore.Http;
 
 namespace DevIO.Api.Extensions
@@ -10,24 +9,21 @@ namespace DevIO.Api.Extensions
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger logger)
+        public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try { await _next(httpContext); }
-            catch (Exception ex) { await HandleExceptionAsync(httpContext, ex, _logger); }
+            catch (Exception ex) { await HandleExceptionAsync(httpContext, ex); }
 
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger logger)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            logger.Debug("CHUPA");
             await exception.ShipAsync(context);
             context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         }
