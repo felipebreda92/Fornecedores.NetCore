@@ -19,7 +19,6 @@ namespace DevIO.Api.Extensions
         {
             try { await _next(httpContext); }
             catch (Exception ex) { await HandleExceptionAsync(httpContext, ex); }
-
         }
 
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)

@@ -23,6 +23,7 @@ namespace DevIO.Api.V2.Controllers
         public string Valor()
         {
 
+
             throw new Exception("Error");
             //try
             //{
